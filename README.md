@@ -2,6 +2,8 @@
 
 This is the officially supported PHP 7.x client library for the [db-ip.com](https://db-ip.com/) API services.
 
+More details about API responses are available [here](https://db-ip.com/api/doc.php#addrinfo)
+
 # Usage
 
 See a few examples of command line scripts below that demonstrate usage of the library :
