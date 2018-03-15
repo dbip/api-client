@@ -1,6 +1,6 @@
 # api-client
 
-This is the official supported PHP 7.x client library for the [db-ip.com](https://db-ip.com/) API services.
+This is the officially supported PHP 7.x client library for the [db-ip.com](https://db-ip.com/) API services.
 
 # Usage
 

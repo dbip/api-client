@@ -24,10 +24,7 @@
 
 namespace DBIP;
 
-const baseUrl = "http://api.db-ip.com/v2/";
-
 class ClientError extends \Exception {
-
 }
 
 class ServerError extends \Exception {
@@ -81,7 +78,7 @@ class Client {
 		}
 	}
 
-	protected function apiCall($path = "") : \stdClass {
+	protected function apiCall(string $path = "") : \stdClass {
 		$url = $this->baseUrl . $this->apiKey . $path;
 		if (isset($this->lang)) {
 			$httpOptions = [];
