@@ -91,11 +91,9 @@ class Client {
 		}
 		if (!$jsonData) {
 			throw new ClientError("unable to fetch URL: {$url}");
-		}
-		if (!$data = @json_decode($jsonData)) {
+		} else if (!$data = @json_decode($jsonData)) {
 			throw new ClientError("cannot decode server response");
-		}
-		if (isset($data->error)) {
+		} else if (isset($data->error)) {
 			throw new ServerError("server reported an error: {$data->error}", $data->errorCode);
 		}
 		return $data;
