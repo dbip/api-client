@@ -24,6 +24,9 @@
 
 namespace DBIP;
 
+const DEFAULT_BASE_URL = "http://api.db-ip.com/v2/";
+const DEFAULT_API_KEY = "free";
+
 class ClientError extends \Exception {
 }
 
@@ -38,7 +41,7 @@ class ServerError extends \Exception {
 	}
 }
 
-class ErrorCode {
+abstract class ErrorCode {
 	const INVALID_KEY = "INVALID_KEY",
 		INVALID_ADDRESS = "INVALID_ADDRESS",
 		HTTPS_NOT_ALLOWED = "HTTPS_NOT_ALLOWED",
@@ -51,10 +54,11 @@ class ErrorCode {
 
 class Client {
 
-	private $baseUrl = "http://api.db-ip.com/v2/";
+	private $baseUrl;
 	private $apiKey;
 	private $lang;
 
+	static private $defaultBaseUrl = DEFAULT_BASE_URL;
 	static private $instance;
 
 	static public function getInstance() : self {
@@ -64,7 +68,11 @@ class Client {
 		return self::$instance;
 	}
 
-	private function __construct(string $apiKey = null, string $baseUrl = null) {
+	static public function setBaseUrl(string $url) : void {
+		self::$defaultBaseUrl = $url;
+	}
+
+	protected function __construct(string $apiKey = null, string $baseUrl = null) {
 		if (isset($apiKey)) {
 			$this->apiKey = $apiKey;
 		} else {
@@ -72,6 +80,8 @@ class Client {
 		}
 		if (isset($baseUrl)) {
 			$this->baseUrl = $baseUrl;
+		} else {
+			$this->baseUrl = self::$defaultBaseUrl;
 		}
 		if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
 			$this->setPreferredLanguage($_SERVER["HTTP_ACCEPT_LANGUAGE"]);
@@ -80,16 +90,15 @@ class Client {
 
 	protected function apiCall(string $path = "") : \stdClass {
 		$url = $this->baseUrl . $this->apiKey . $path;
+		$httpOptions = [
+			"header" => [
+				"User-Agent: dbip-api-client",
+			],
+		];
 		if (isset($this->lang)) {
-			$httpOptions = [];
-			if (isset($this->lang)) {
-				$httpOptions["header"] = "Accept-Language: " . $this->lang;
-			}
-			$jsonData = @file_get_contents($url, false, stream_context_create([ $httpOptions ]));
-		} else {
-			$jsonData = @file_get_contents($url);
+			$httpOptions["header"][] = [ "Accept-Language: {$this->lang}" ];
 		}
-		if (!$jsonData) {
+		if (!$jsonData = file_get_contents($url, false, stream_context_create([ "http" => $httpOptions ]))) {
 			throw new ClientError("unable to fetch URL: {$url}");
 		} else if (!$data = @json_decode($jsonData)) {
 			throw new ClientError("cannot decode server response");
@@ -124,7 +133,7 @@ class Address {
 }
 
 class APIKey {
-	public static $defaultApiKey;
+	static public $defaultApiKey = DEFAULT_API_KEY;
 	static public function set(string $apiKey) : void {
 		self::$defaultApiKey = $apiKey;
 	}
