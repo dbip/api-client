@@ -100,7 +100,7 @@ class Client {
 		}
 		if (!$jsonData = file_get_contents($url, false, stream_context_create([ "http" => $httpOptions ]))) {
 			throw new ClientError("unable to fetch URL: {$url}");
-		} else if (!$data = @json_decode($jsonData)) {
+		} else if (!$data = json_decode($jsonData)) {
 			throw new ClientError("cannot decode server response");
 		} else if (isset($data->error)) {
 			throw new ServerError("server reported an error: {$data->error}", $data->errorCode);
@@ -113,11 +113,13 @@ class Client {
 	}
 
 	public function getAddressInfo($addr) : \stdClass {
+		$path = "/";
 		if (is_array($addr)) {
-			return $this->apiCall("/" . implode(",", $addr));
+			$path .= implode(",", $addr);
 		} else {
-			return $this->apiCall("/" . $addr);
+			$path .= $addr;
 		}
+		return $this->apiCall($path);
 	}
 
 	public function getKeyInfo() : \stdClass {
@@ -127,7 +129,7 @@ class Client {
 }
 
 class Address {
-	static public function lookup($addr) : \stdClass {
+	static public function lookup($addr = "self") : \stdClass {
 		return Client::getInstance()->getAddressInfo($addr);
 	}
 }
