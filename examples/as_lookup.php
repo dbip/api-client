@@ -3,7 +3,7 @@
 
 require "dbip-client.class.php";
 
-DBIP\APIKey::set("ead221f573879ce90dd9d26caec11dc79752a86b");
+DBIP\APIKey::set("YOUR_API_KEY_GOES_HERE");
 
 $myAsn = DBIP\Address::lookup()->asNumber;
 $asInfo = DBIP\ASN::lookup(16591);

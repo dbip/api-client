@@ -122,6 +122,16 @@ class Client {
 		return $this->apiCall($path);
 	}
 
+	public function getASInfo($asNumber) : \stdClass {
+		$path = "/as/";
+		if (is_array($asNumber)) {
+			$path .= implode(",", $asNumber);
+		} else {
+			$path .= $asNumber;
+		}
+		return $this->apiCall($path);
+	}
+
 	public function getKeyInfo() : \stdClass {
 		return $this->apiCall();
 	}
@@ -131,6 +141,12 @@ class Client {
 class Address {
 	static public function lookup($addr = "self") : \stdClass {
 		return Client::getInstance()->getAddressInfo($addr);
+	}
+}
+
+class ASN {
+	static public function lookup($asNumber) : \stdClass {
+		return Client::getInstance()->getASInfo($asNumber);
 	}
 }
 
