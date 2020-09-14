@@ -96,7 +96,7 @@ class Client {
 			],
 		];
 		if (isset($this->lang)) {
-			$httpOptions["header"][] = [ "Accept-Language: {$this->lang}" ];
+			$httpOptions["header"][] = "Accept-Language: {$this->lang}";
 		}
 		if (!$jsonData = file_get_contents($url, false, stream_context_create([ "http" => $httpOptions ]))) {
 			throw new ClientError("unable to fetch URL: {$url}");
