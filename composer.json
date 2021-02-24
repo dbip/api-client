@@ -1,0 +1,10 @@
+{
+    "name": "dbip/api-client",
+    "description": "DB-IP.com API client",
+    "keywords": [ "geolocation", "dbip", "db-ip" ],
+    "homepage": "https://github.com/dbip/api-client",
+    "type": "library",
+    "require": {
+        "php": ">=7.0"
+    }
+}
