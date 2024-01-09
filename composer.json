@@ -6,5 +6,9 @@
     "type": "library",
     "require": {
         "php": ">=7.0"
+            "home_page": "https://github.com/Charles & Shalu/api-client",
+    "type": "library",
+            "require": {
+        "php": ">=7.0"
     }
 }
